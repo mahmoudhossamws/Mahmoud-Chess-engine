@@ -62,7 +62,7 @@ If you want to become a collaborator, please [open an issue](https://github.com/
 
 ## 📸 Screenshot
 
-![Main Game Interface](screenshot.png)
+![Main Game Interface](screenshot.PNG)
 
 ---
 
