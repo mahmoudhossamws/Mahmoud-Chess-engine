@@ -1,6 +1,7 @@
 import tensorflow as tf
 import keras
 import os
+import sys
 import numpy as np
 from tensorflow.keras import datasets, layers, models
 import matplotlib.pyplot as plt
@@ -9,6 +10,11 @@ import chess.pgn
 from tensorflow.keras.callbacks import ModelCheckpoint
 import h5py
 import pygame
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+
 # --- Board Encoding Function ---
 def fen_to_8x8x12(fen):
     piece_to_channel = {
@@ -84,7 +90,8 @@ checkpoint = ModelCheckpoint(
     verbose=1
 )
 
-#parse_pgn_to_h5("chess dataset.pgn")
+'''
+parse_pgn_to_h5("chess dataset.pgn")
 
 
 with h5py.File("chess_dataset.h5", "r") as hf:
@@ -134,7 +141,7 @@ def val_generator():
                 yield boards[indices[i:i+batch_size]], labels[indices[i:i+batch_size]]
 
 # Train with validation
-'''model.fit(
+model.fit(
     train_generator(),
     steps_per_epoch=train_size // batch_size,
     validation_data=val_generator(),
@@ -175,7 +182,7 @@ def get_best_move(board, model):
     predictions = model.predict(input_tensor, verbose=0).flatten()
 
     # Find best move
-    best_idx = np.argmax(predictions)
+    best_idx = np.argmin(predictions)
     return legal_moves[best_idx], predictions[best_idx]
 
 
@@ -190,23 +197,35 @@ SQ_SIZE = HEIGHT // DIMENSION
 IMAGES = {}
 PLAYER_IMAGES = {}
 
+
 def load_images():
     pieces = ['wp', 'wR', 'wN', 'wB', 'wQ', 'wK',
               'bp', 'bR', 'bN', 'bB', 'bQ', 'bK']
     for piece in pieces:
-        IMAGES[piece] = pygame.transform.scale(
-            pygame.image.load(f"images/{piece}.png"), (SQ_SIZE, SQ_SIZE))
+        try:
+            IMAGES[piece] = pygame.transform.scale(
+                pygame.image.load(resource_path(f"images/{piece}.png")),
+                (SQ_SIZE, SQ_SIZE))
+        except Exception as e:
+            print(f"Failed to load {piece}.png: {e}")
+            IMAGES[piece] = pygame.Surface((SQ_SIZE, SQ_SIZE))
+
     # Player photos
     try:
         PLAYER_IMAGES['engine'] = pygame.transform.smoothscale(
-            pygame.image.load("images/mahmoud.jpg"), (100, 100))
-    except:
-        PLAYER_IMAGES['engine'] = pygame.Surface((100, 100)); PLAYER_IMAGES['engine'].fill((200, 0, 0))
+            pygame.image.load(resource_path("images/mahmoud.jpg")), (100, 100))
+    except Exception as e:
+        print(f"Failed to load engine photo: {e}")
+        PLAYER_IMAGES['engine'] = pygame.Surface((100, 100))
+        PLAYER_IMAGES['engine'].fill((200, 0, 0))
+
     try:
         PLAYER_IMAGES['player'] = pygame.transform.scale(
-            pygame.image.load("images/player.jpg"), (100, 100))
-    except:
-        PLAYER_IMAGES['player'] = pygame.Surface((100, 100)); PLAYER_IMAGES['player'].fill((0, 0, 200))
+            pygame.image.load(resource_path("images/player.jpg")), (100, 100))
+    except Exception as e:
+        print(f"Failed to load player photo: {e}")
+        PLAYER_IMAGES['player'] = pygame.Surface((100, 100))
+        PLAYER_IMAGES['player'].fill((0, 0, 200))
 def draw_board(screen):
     colors = [pygame.Color("white"), pygame.Color("gray")]
     for row in range(DIMENSION):
@@ -229,7 +248,9 @@ def draw_pieces(screen, board):
 def highlight_squares(screen, board, selected_square):
     if selected_square is not None:
         row, col = 7 - (selected_square // 8), selected_square % 8
-        s = pygame.Surface((SQ_SIZE, SQ_SIZE)); s.set_alpha(100); s.fill(pygame.Color('blue'))
+        s = pygame.Surface((SQ_SIZE, SQ_SIZE))
+        s.set_alpha(100)
+        s.fill(pygame.Color('blue'))
         screen.blit(s, (PANEL_WIDTH + col * SQ_SIZE, row * SQ_SIZE))
         for move in board.legal_moves:
             if move.from_square == selected_square:
@@ -327,7 +348,7 @@ def main(model_path):
     model.add(layers.Dense(1, activation='sigmoid'))
 
     model.compile(optimizer='adam', loss=tf.keras.losses.binary_crossentropy, metrics=['accuracy'])
-    model.load_weights('weights_epoch_03.weights.h5')
+    model.load_weights(resource_path('weights_epoch_03.weights.h5'))
     screen = pygame.display.set_mode((TOTAL_WIDTH, HEIGHT))
     pygame.display.set_caption("Chess vs Mahmoud Engine v1.0")
     clock = pygame.time.Clock()

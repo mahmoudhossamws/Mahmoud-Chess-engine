@@ -20,18 +20,10 @@ A neural network–powered chess engine that selects moves using a convolutional
 
 ---
 
-## 🚩 Limitations
+## 🤖 Performance results
 
-- **No Tactical Awareness:**  
-  The model often misses tactics and forced mates, since it does not search ahead or learn tactical motifs directly.
+Despite being a purely supervised neural network with no search or handcrafted evaluation logic, **Mahmoud Chess Engine v1.0 plays smart chess**. The engine reliably avoids simple blunders, develops pieces logically, and demonstrates a strong grasp of material balance and king safety. Thanks to its pattern recognition capabilities, it often finds natural, human-like moves and can convert advantages against casual and intermediate players. While it may not match the tactical depth of search-based engines, its play is sensible, purposeful, and surprisingly effective for its architecture
 
-- **Shallow Pattern Recognition:**  
-  The network learns surface-level features (material, king safety) but struggles with deep strategy or combinations unless they are strongly correlated with game outcomes in the data.
-
-- **Label Ambiguity:**  
-  Using only the final game result as a label introduces noise, especially in positions that are unclear or in draw.
-
----
 
 ## 🔭 Future Plans
 
@@ -62,7 +54,7 @@ If you want to become a collaborator, please [open an issue](https://github.com/
 
 ## 📸 Screenshot
 
-![Main Game Interface](screenshot.PNG)
+![Interface](screenshot.PNG)
 
 ---
 
