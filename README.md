@@ -22,7 +22,7 @@ A neural network–powered chess engine that selects moves using a convolutional
 
 ## 🤖 Performance results
 
-Despite being a purely supervised neural network with no search or handcrafted evaluation logic, **Mahmoud Chess Engine v1.0 plays smart chess**. The engine reliably avoids simple blunders, develops pieces logically, and demonstrates a strong grasp of material balance and king safety. Thanks to its pattern recognition capabilities, it often finds natural, human-like moves and can convert advantages against casual and intermediate players. While it may not match the tactical depth of search-based engines, its play is sensible, purposeful, and surprisingly effective for its architecture
+Mahmoud Chess Engine v1.0 demonstrates **intermediate performance** for a neural network chess engine that relies purely on supervised learning, with no search or handcrafted evaluation logic. The engine generally avoids basic blunders, develops pieces sensibly, and maintains a reasonable grasp of material balance and king safety. Its pattern recognition allows it to play at a level suitable for casual and intermediate players, but it does not reach the tactical sharpness or strategic depth of advanced search-based engines. In summary, while not especially smart or practical in all situations, the engine provides a solid, intermediate-level chess experience for most users.
 
 
 ## 🔭 Future Plans
@@ -58,6 +58,14 @@ If you want to become a collaborator, please [open an issue](https://github.com/
 
 ---
 
+## 🖥️ Download the Windows Executable and try to beat the Engine!
+
+You can download the latest Mahmoud Chess Engine v1.0 Windows executable as a zip file here:
+
+🔗 [Download Mahmoud Chess Engine v1.0 (.zip, Google Drive)](https://drive.google.com/file/d/17PBX1-uNQafle0HKlBocnyvw1g0re3ry/view?usp=sharing)
+
+- Unzip the file and run `project.exe` inside the extracted folder.
+---
 ## 📬 Contact
 
 For questions, feedback, or collaboration requests:  
