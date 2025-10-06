@@ -1,9 +1,10 @@
 <p align="center">
-  <a href="https://mahmoudhossamws.github.io/Mahmoud_Chess_Engine_Web/" target="_blank" rel="noopener" style="text-decoration:none;">
-    <span style="display:inline-block;padding:16px 28px;font-size:20px;border-radius:10px;margin:8px;color:#fff;background:#1e90ff;">🌐 Visit Website</span>
+  <a href="https://mahmoudhossamws.github.io/Mahmoud_Chess_Engine_Web/">
+    <img src="https://img.shields.io/badge/🌐_Visit_Website-1e90ff?style=for-the-badge&logoColor=white" alt="Visit Website">
   </a>
-  <a href="https://drive.google.com/file/d/17PBX1-uNQafle0HKlBocnyvw1g0re3ry/view?usp=sharing" target="_blank" rel="noopener" style="text-decoration:none;">
-    <span style="display:inline-block;padding:16px 28px;font-size:20px;border-radius:10px;margin:8px;color:#fff;background:#28a745;">💾 Download Windows App</span>
+  &nbsp;&nbsp;
+  <a href="https://drive.google.com/file/d/17PBX1-uNQafle0HKlBocnyvw1g0re3ry/view?usp=sharing">
+    <img src="https://img.shields.io/badge/💾_Download_Windows_App-28a745?style=for-the-badge&logoColor=white" alt="Download Windows App">
   </a>
 </p>
 
