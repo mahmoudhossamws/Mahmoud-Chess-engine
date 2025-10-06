@@ -1,3 +1,12 @@
+<p align="center">
+  <a href="https://mahmoudhossamws.github.io/Mahmoud_Chess_Engine_Web/" target="_blank" rel="noopener" style="text-decoration:none;">
+    <span style="display:inline-block;padding:16px 28px;font-size:20px;border-radius:10px;margin:8px;color:#fff;background:#1e90ff;">🌐 Visit Website</span>
+  </a>
+  <a href="https://drive.google.com/file/d/17PBX1-uNQafle0HKlBocnyvw1g0re3ry/view?usp=sharing" target="_blank" rel="noopener" style="text-decoration:none;">
+    <span style="display:inline-block;padding:16px 28px;font-size:20px;border-radius:10px;margin:8px;color:#fff;background:#28a745;">💾 Download Windows App</span>
+  </a>
+</p>
+
 # ♟️ Mahmoud Chess Engine v1.0
 
 A neural network–powered chess engine that selects moves using a convolutional neural network (CNN) trained on game outcomes. This project is a demonstration of a **purely supervised learning approach** to chess AI and is **open for collaboration**!
@@ -52,23 +61,37 @@ If you want to become a collaborator, please [open an issue](https://github.com/
 
 ---
 
-## 📸 Screenshot
+## 🌐 Website
+
+The project's website frontend is built using HTML, CSS and JavaScript and is hosted on GitHub Pages. The model that powers functionality on the site is hosted on Hugging Face Spaces and is used via its API.
+
+🔗 [Visit the Website](https://mahmoudhossamws.github.io/Mahmoud_Chess_Engine_Web/)
+
+
+![Web Screenshot](Web_Screenshot.PNG)
+
+---
+
+## 🖥️ Desktop App
+
+The Windows desktop application is a standalone build of the engine with a Pygame-based user interface.
+
+- UI library: Pygame (the desktop app uses Pygame for rendering and input handling)
+- Run (development): install Python 3.8+ and Pygame, then run `project.py` (this launches the Pygame UI)
+- Distribution: a packaged Windows executable is provided as a zip (link below)
+
+🔗 [Download Mahmoud Chess Engine v1.0 (.zip, Google Drive)](https://drive.google.com/file/d/17PBX1-uNQafle0HKlBocnyvw1g0re3ry/view?usp=sharing)
+
+Unzip and run `project.exe` inside the extracted folder.
 
 ![Interface](screenshot.PNG)
 
 ---
 
-## 🖥️ Download the Windows Executable and try to beat the Engine!
-
-You can download the latest Mahmoud Chess Engine v1.0 Windows executable as a zip file here:
-
-🔗 [Download Mahmoud Chess Engine v1.0 (.zip, Google Drive)](https://drive.google.com/file/d/17PBX1-uNQafle0HKlBocnyvw1g0re3ry/view?usp=sharing)
-
-- Unzip the file and run `project.exe` inside the extracted folder.
----
-## 📬 Contact
+##  Contact
 
 For questions, feedback, or collaboration requests:  
 📧 **mahmoudhossam@aucegypt.edu**
 
 ---
+
