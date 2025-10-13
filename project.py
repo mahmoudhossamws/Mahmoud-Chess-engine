@@ -15,7 +15,7 @@ def resource_path(relative_path):
     base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
     return os.path.join(base_path, relative_path)
 
-# --- Board Encoding Function ---
+# board encoding function ---
 def fen_to_8x8x12(fen):
     piece_to_channel = {
         'P': 0, 'N': 1, 'B': 2, 'R': 3, 'Q': 4, 'K': 5,
@@ -32,7 +32,7 @@ def fen_to_8x8x12(fen):
     return tensor
 
 
-# --- PGN to HDF5 Batch Parser ---
+# PGN to HDF5 batch parser
 def parse_pgn_to_h5(pgn_path, h5_path="chess_dataset.h5", batch_size=10000):
     with h5py.File(h5_path, "w") as hf:
         boards_ds = hf.create_dataset(
@@ -63,7 +63,7 @@ def parse_pgn_to_h5(pgn_path, h5_path="chess_dataset.h5", batch_size=10000):
                     pos_count += 1
                 game_count += 1
 
-                # Save batch
+                # save batch
                 if len(x_batch) >= batch_size:
                     new_size = boards_ds.shape[0] + len(x_batch)
                     boards_ds.resize(new_size, axis=0)
@@ -74,7 +74,7 @@ def parse_pgn_to_h5(pgn_path, h5_path="chess_dataset.h5", batch_size=10000):
                     x_batch.clear()
                     y_batch.clear()
 
-            # Save any remaining data
+            # save any remaining data
             if x_batch:
                 new_size = boards_ds.shape[0] + len(x_batch)
                 boards_ds.resize(new_size, axis=0)
@@ -86,7 +86,7 @@ def parse_pgn_to_h5(pgn_path, h5_path="chess_dataset.h5", batch_size=10000):
 checkpoint = ModelCheckpoint(
     filepath='weights_epoch_{epoch:02d}.weights.h5',
     save_weights_only=True,
-    save_best_only=False,      # Save after every epoch, not just the best
+    save_best_only=False,      # save after every epoch
     verbose=1
 )
 
@@ -100,7 +100,6 @@ batch_size = 64
 train_size = int(0.8 * total_samples)
 val_size = total_samples - train_size
 
-# Train/validation generators
 def train_generator():
     with h5py.File("chess_dataset.h5", "r") as hf:
         boards = hf["boards"]
@@ -108,9 +107,7 @@ def train_generator():
         total_batches = (train_size + batch_size - 1) // batch_size
         batch_num = 0
         while True:
-            # Generate shuffled indices each epoch
             indices = np.random.permutation(train_size)
-            # Sort indices for HDF5 safe slicing
             sorted_indices = np.sort(indices)
             for i in range(0, train_size, batch_size):
                 batch_start = i
@@ -121,14 +118,12 @@ def train_generator():
                     remaining = total_batches - batch_num
                     print(f"Batch {batch_num+1}/{total_batches} (remaining: {remaining})")
                     print(f"Sample indices: {batch_indices[:5]}...{batch_indices[-5:]}")
-                # Get data from HDF5
                 batch_boards = boards[batch_indices]
                 batch_labels = labels[batch_indices]
-                # Shuffle in RAM to restore randomness
                 perm = np.random.permutation(len(batch_boards))
                 yield batch_boards[perm], batch_labels[perm]
                 batch_num += 1
-            batch_num = 0  # Reset for next epoch
+            batch_num = 0  
 
 def val_generator():
     with h5py.File("chess_dataset.h5", "r") as hf:
@@ -139,8 +134,6 @@ def val_generator():
             np.random.shuffle(indices)
             for i in range(0, len(boards), batch_size):
                 yield boards[indices[i:i+batch_size]], labels[indices[i:i+batch_size]]
-
-# Train with validation
 model.fit(
     train_generator(),
     steps_per_epoch=train_size // batch_size,
@@ -170,25 +163,23 @@ def get_best_move(board, model):
     if not legal_moves:
         return None, 0.0
 
-    # Generate all possible resulting positions
+    # generate all possible resulting positions
     boards_after_moves = []
     for move in legal_moves:
         temp_board = board.copy()
         temp_board.push(move)
         boards_after_moves.append(fen_to_8x8x12(temp_board.fen()))
 
-    # Convert to numpy array and predict
+    # convert to numpy array and predict
     input_tensor = np.array(boards_after_moves)
     predictions = model.predict(input_tensor, verbose=0).flatten()
 
-    # Find best move
+    # find best move
     best_idx = np.argmin(predictions)
     return legal_moves[best_idx], predictions[best_idx]
 
 
-# Initialize Pygame
 pygame.init()
-# Update window dimensions for side panels
 PANEL_WIDTH = 160
 WIDTH = HEIGHT = 512
 TOTAL_WIDTH = WIDTH + 2 * PANEL_WIDTH
@@ -210,7 +201,6 @@ def load_images():
             print(f"Failed to load {piece}.png: {e}")
             IMAGES[piece] = pygame.Surface((SQ_SIZE, SQ_SIZE))
 
-    # Player photos
     try:
         PLAYER_IMAGES['engine'] = pygame.transform.smoothscale(
             pygame.image.load(resource_path("images/mahmoud.jpg")), (100, 100))
@@ -266,7 +256,7 @@ def draw_left_panel(screen, human_turn):
     font_title = pygame.font.SysFont("Arial", 20, bold=True)
     font_small = pygame.font.SysFont("Arial", 16)
 
-    # Mahmoud Engine v1.0 (top)
+    # mahmoud Engine v1.0 (top)
     screen.blit(PLAYER_IMAGES['engine'], (30, 20))
     eng_text = font_title.render("Mahmoud", True, pygame.Color("black"))
     screen.blit(eng_text, (20, 130))
@@ -277,7 +267,7 @@ def draw_left_panel(screen, human_turn):
     if not human_turn:
         pygame.draw.rect(screen, pygame.Color("green"), pygame.Rect(20, 20, 100, 100), 3)
 
-    # You (bottom) -- label well above the photo
+    # you (bottom)
     you_label_y = HEIGHT - 180   # <<-- Move this value higher for more space
     you_text = font_title.render("You", True, pygame.Color("black"))
     screen.blit(you_text, (20, you_label_y))
@@ -303,12 +293,12 @@ def draw_right_panel(screen, board, model):
         prediction = model.predict(np.array([position_tensor]), verbose=0)[0][0]
         white_prob = prediction * 100
         black_prob = (1 - prediction) * 100
-        # Display probabilities
+        # display probabilitiees
         white_text = font_medium.render(f"White: {white_prob:.1f}%", True, pygame.Color("black"))
         black_text = font_medium.render(f"Black: {black_prob:.1f}%", True, pygame.Color("black"))
         screen.blit(white_text, (PANEL_WIDTH + WIDTH + 10, 70))
         screen.blit(black_text, (PANEL_WIDTH + WIDTH + 10, 100))
-        # Winner prediction
+        # winner prediction
         if white_prob > black_prob:
             winner_text = font_medium.render("Predicted: White", True, pygame.Color("black"))
         elif black_prob > white_prob:
@@ -334,8 +324,6 @@ def draw_promotion_menu(screen, color):
     screen.blit(choose_text, (PANEL_WIDTH + WIDTH + 10, 170))
 
 def main(model_path):
-    # Load your trained model
-
     model = models.Sequential()
     model.add(layers.Input(shape=(8, 8, 12)))
     model.add(layers.Conv2D(32, (3, 3), activation='relu'))
@@ -390,7 +378,7 @@ def main(model_path):
                                 human_turn = False
                             selected_square = None
 
-        # Promotion menu event handling
+        # promotion menu event handling
         if promotion_pending:
             draw_promotion_menu(screen, promotion_color)
             pygame.display.flip()
@@ -423,7 +411,7 @@ def main(model_path):
                 board.push(ai_move)
             human_turn = True
 
-        # Draw everything
+        # draw everything
         screen.fill(pygame.Color("white"))
         draw_left_panel(screen, human_turn)
         draw_board(screen)
@@ -433,7 +421,6 @@ def main(model_path):
         if promotion_pending:
             draw_promotion_menu(screen, promotion_color)
 
-        # Game over text
         if board.is_game_over():
             font = pygame.font.SysFont("Arial", 32)
             text = font.render("Game Over - " + board.result(), True, pygame.Color("red"))
