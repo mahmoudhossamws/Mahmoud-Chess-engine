@@ -10,7 +10,7 @@
 
 # Mahmoud Chess Engine v1.0
 
-Mahmoud Chess Engine v1.0 is a neural network chess engine that selects moves using a convolutional neural network trained on game outcomes. The engine uses supervised learning and is open for collaboration
+Mahmoud Chess Engine v1.0 is a neural network chess engine that selects moves using a convolutional neural network trained on game outcomes. The engine uses supervised learning and is open for collaboration.
 
 ## Approach
 
@@ -25,14 +25,6 @@ No Search or Lookahead: The engine does not perform tree search or tactical look
 ## Performance
 
 The engine shows intermediate performance. It avoids basic blunders, develops pieces sensibly, and keeps reasonable material balance and king safety. It is suitable for casual and intermediate players but does not reach the depth of search-based engines
-
-## Future Plans
-
-Integrate Search Algorithms: Combine the neural network with minimax or alpha-beta search to evaluate sequences of moves
-
-Self-Play and Reinforcement Learning: Improve the engine by learning from its own games
-
-Model Architecture Enhancements: Try deeper or more specialized neural network architectures
 
 ## Open for Collaboration
 
